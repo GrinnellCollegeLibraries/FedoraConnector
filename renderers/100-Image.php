@@ -41,10 +41,44 @@ class Image_Renderer extends FedoraConnector_AbstractRenderer
 
         // Construct the image URL.
         $url = "{$object->getServer()->url}/objects/{$object->pid}" .
-            "/datastreams/SCREEN/content";
+            "/datastreams/" . $params['dsid'] . "/content";
+
+        // Check params to see how big the image should be; default to svc.level 3
+        
+        if(!array_key_exists('size', $params)) {
+            $params['size'] = 3;
+        }
+
+        $serviceLevel = NULL;
+        $crop = NULL;
+        
+        switch ($params['size']) {
+            case "fullsize":
+                $serviceLevel = 3;
+                break;
+            case "square_thumbnail":
+                $serviceLevel = 2;
+                $crop = "0,0,225,225"
+                break;
+            case "thumbnail":
+                $serviceLevel = 1;
+                break;
+            default:
+                $serviceLevel = 3;
+        }
+        
+        // Wrap it in the URL for Djatoka
+        
+        $scaled = "http://digital.grinnell.edu:8080/adore-djatoka/resolver?url_ver=Z39.88-2004&rft_id=" 
+            . $url . "&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/png&svc.level="
+            . $serviceLevel . "&svc.rotate=0";
+            
+        if ($crop != NULL) {
+            $scaled .= "&svc.region=" . $crop;
+        }
 
         // Return the image tag.
-        return "<img class='fedora-renderer' alt='image' src='{$url}' />";
+        return "<img class='fedora-renderer' alt='image' src='{$scaled}' />";
 
     }
 
