@@ -59,7 +59,7 @@ class FedoraConnector_Render
                 if ($params == null) {
                     $params = array();
                 }
-                params["dsid"] = $dsid;
+                $params["dsid"] = $dsid;
                 return $renderer->display($object, $params);
             }
 
