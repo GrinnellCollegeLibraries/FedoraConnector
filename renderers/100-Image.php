@@ -58,7 +58,7 @@ class Image_Renderer extends FedoraConnector_AbstractRenderer
                 break;
             case "square_thumbnail":
                 $serviceLevel = 2;
-                $crop = "0,0,225,225"
+                $crop = "0,0,225,225";
                 break;
             case "thumbnail":
                 $serviceLevel = 1;
